@@ -1,3 +1,7 @@
+I built this module to create test clients for my CFEngine set-up. The set-up is very specific and may not be useful in a general case. The module itself however could be useful as a starting point for building generic test clients.
+
+See the [ARCHITECTURE](ARCHITECTURE.md) document for details.
+
 ## Requirements
 
 The following requirements are needed by this module:
@@ -40,7 +44,7 @@ Type: `string`
 
 ### instance\_sg\_name
 
-Description: Name tag for the security group that applies to the instance
+Description: Value of the Name tag for the security group that applies to the instance (used to look up the security group for the instance, must be unique)
 
 Type: `string`
 
@@ -50,15 +54,9 @@ Description: Instance type for the CFEngine server
 
 Type: `string`
 
-### priv\_subnet\_name
-
-Description: Value of the Name tag for the private subnet (must be unique)
-
-Type: `string`
-
 ### pub\_subnet\_name
 
-Description: Value of the Name tag for the public subnet (must be unique)
+Description: Value of the Name tag for the public subnet (used to look up the public subnet for the instance, must be unique)
 
 Type: `string`
 
@@ -74,7 +72,7 @@ The following input variables are optional (have default values):
 
 ### ami\_id
 
-Description: Set to 'latest' to use the latest, or specify an AMI ID
+Description: Set to 'latest' to use the latest official Debian 'buster' AMI, or specify an AMI ID to use a different one
 
 Type: `string`
 
@@ -111,10 +109,6 @@ Description: Id for the instance running the service
 ### private\_ip
 
 Description: Private IP for the instance
-
-### private\_subnet\_id
-
-Description: Id of the private subnet (calculated from the subnet name)
 
 ### public\_subnet\_id
 

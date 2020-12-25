@@ -1,3 +1,9 @@
+/*
+* I built this module to create test clients for my CFEngine set-up. The set-up is very specific and may not be useful in a general case. The module itself however could be useful as a starting point for building generic test clients.
+*
+* See the [ARCHITECTURE](ARCHITECTURE.md) document for details.
+*/
+
 ########################################################################
 # Data collection
 
@@ -8,11 +14,13 @@ data "aws_subnet" "public" {
   }
 }
 
+/*
 data "aws_subnet" "private" {
   tags = {
     Name = var.priv_subnet_name
   }
 }
+*/
 
 # Security groups
 data "aws_security_group" "cfclient" {

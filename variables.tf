@@ -1,12 +1,14 @@
 variable "pub_subnet_name" {
-  description = "Value of the Name tag for the public subnet (must be unique)"
+  description = "Value of the Name tag for the public subnet (used to look up the public subnet for the instance, must be unique)"
   type        = string
 }
 
+/*
 variable "priv_subnet_name" {
-  description = "Value of the Name tag for the private subnet (must be unique)"
+  description = "Value of the Name tag for the private subnet (used to look up the private subnet for the instance, must be unique)"
   type        = string
 }
+*/
 
 variable "instance_type" {
   description = "Instance type for the CFEngine server"
@@ -24,7 +26,7 @@ variable "ssh_key_name" {
 }
 
 variable "instance_sg_name" {
-  description = "Name tag for the security group that applies to the instance"
+  description = "Value of the Name tag for the security group that applies to the instance (used to look up the security group for the instance, must be unique)"
   type        = string
 }
 
@@ -44,6 +46,6 @@ variable "spot_instance" {
 }
 
 variable "ami_id" {
-  description = "Set to 'latest' to use the latest, or specify an AMI ID"
+  description = "Set to 'latest' to use the latest official Debian 'buster' AMI, or specify an AMI ID to use a different one"
   default     = "latest"
 }
