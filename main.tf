@@ -14,14 +14,6 @@ data "aws_subnet" "public" {
   }
 }
 
-/*
-data "aws_subnet" "private" {
-  tags = {
-    Name = var.priv_subnet_name
-  }
-}
-*/
-
 # Security groups
 data "aws_security_group" "cfclient" {
   name = var.instance_sg_name

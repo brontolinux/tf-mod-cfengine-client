@@ -3,13 +3,6 @@ variable "pub_subnet_name" {
   type        = string
 }
 
-/*
-variable "priv_subnet_name" {
-  description = "Value of the Name tag for the private subnet (used to look up the private subnet for the instance, must be unique)"
-  type        = string
-}
-*/
-
 variable "instance_type" {
   description = "Instance type for the CFEngine server"
   type        = string

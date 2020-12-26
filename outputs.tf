@@ -3,13 +3,6 @@ output "public_subnet_id" {
   value = data.aws_subnet.public.id
 }
 
-/*
-output "private_subnet_id" {
-  description = "Id of the private subnet (calculated from the subnet name)"
-  value = data.aws_subnet.private.id
-}
-*/
-
 output "security_group_id" {
   description = "Id of the security group for the instance (calculated from the security group name)"
   value = data.aws_security_group.cfclient.id
