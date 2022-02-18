@@ -4,7 +4,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Configure CFEngine repository
 echo "Configuring CFEngine APT repository"
-wget -qO- https://cfengine-package-repos.s3.amazonaws.com/pub/gpg.key | apt-key add -
+wget -q -O /etc/apt/trusted.gpg.d/cfengine-community-keyring.asc  https://cfengine-package-repos.s3.amazonaws.com/pub/gpg.key
 echo "deb https://cfengine-package-repos.s3.amazonaws.com/pub/apt/packages stable main" > /etc/apt/sources.list.d/cfengine-community.list
 
 # Install package and hold, so that it doesn't get automatically upgraded when it shouldn't

@@ -39,6 +39,6 @@ variable "spot_instance" {
 }
 
 variable "ami_id" {
-  description = "Set to 'latest' to use the latest official Debian 'buster' AMI, or specify an AMI ID to use a different one"
+  description = "Set to 'latest' to use the latest official Debian 'bullseye' AMI, or specify an AMI ID to use a different one"
   default     = "latest"
 }
