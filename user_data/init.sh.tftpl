@@ -11,7 +11,7 @@ echo "deb https://cfengine-package-repos.s3.amazonaws.com/pub/apt/packages stabl
 echo "Updating package cache and installing CFEngine"
 apt-get update
 apt-get install -y cfengine-community=${package_version}
-echo cfengine-community hold | sudo dpkg --set-selections
+apt-mark hold cfengine-community
 
 echo "Bootstrapping cfengine client..."
 cf-agent --bootstrap ${cfengine_server}
