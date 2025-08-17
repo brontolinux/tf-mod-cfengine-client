@@ -19,13 +19,13 @@ data "aws_security_group" "cfclient" {
   name = var.instance_sg_name
 }
 
-# Official Debian 10 AMI, latest
+# Official Debian AMI, latest
 data "aws_ami" "debian_official" {
   most_recent = true
-  name_regex  = "^debian-12-amd64-.+"
+  name_regex  = "^debian-13-amd64-.+"
 
-  # Owner of official debian 10 AMIs
-  # See https://wiki.debian.org/Cloud/AmazonEC2Image/Buster
+  # Owner of official debian AMIs
+  # See https://wiki.debian.org/Cloud/AmazonEC2Image
   owners = ["136693071363"]
 
   filter {
