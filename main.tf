@@ -19,13 +19,13 @@ data "aws_security_group" "cfclient" {
   name = var.instance_sg_name
 }
 
-# Official Debian 10 AMI, latest
+# Official Debian AMI, latest
 data "aws_ami" "debian_official" {
   most_recent = true
-  name_regex  = "^debian-11-amd64-.+"
+  name_regex  = "^debian-13-amd64-.+"
 
-  # Owner of official debian 10 AMIs
-  # See https://wiki.debian.org/Cloud/AmazonEC2Image/Buster
+  # Owner of official debian AMIs
+  # See https://wiki.debian.org/Cloud/AmazonEC2Image
   owners = ["136693071363"]
 
   filter {
@@ -39,24 +39,20 @@ data "aws_ami" "debian_official" {
   }
 }
 
-# Render templates for cloud-init
-data "template_file" "cloud_init" {
-  template = file("${path.module}/user_data/cloud-init.tpl")
 
-  vars = {
-    instance_name            = var.instance_name
-  }
-}
-
-data "template_file" "init_sh" {
-  template = file("${path.module}/user_data/init.sh.tpl")
-
-  vars = {
+# Render templates for cloud-init using templatefile() function
+locals {
+  cloud_init = templatefile("${path.module}/user_data/cloud-init.tftpl", {
+    instance_name = var.instance_name
+  })
+  init_sh = templatefile("${path.module}/user_data/init.sh.tftpl", {
     package_version = var.cfengine_deb_package_version
     cfengine_server = var.cfengine_server
-  }
+  })
 }
 
+
+# Use local values for rendered templates
 data "template_cloudinit_config" "cloud_init" {
   gzip          = true
   base64_encode = true
@@ -64,13 +60,13 @@ data "template_cloudinit_config" "cloud_init" {
   part {
     filename     = "cloud-init"
     content_type = "text/cloud-config"
-    content      = data.template_file.cloud_init.rendered
+    content      = local.cloud_init
   }
 
   part {
     filename     = "00-init.sh"
     content_type = "text/x-shellscript"
-    content      = data.template_file.init_sh.rendered
+    content      = local.init_sh
   }
 }
 
@@ -124,10 +120,6 @@ resource "aws_spot_instance_request" "cfengine" {
     instanceName = var.instance_name
   }
 
-  provisioner "local-exec" {
-    command    = "aws ec2 create-tags --tags Key=Name,Value=${var.instance_name} --resources ${self.spot_instance_id}"
-    on_failure = continue
-  }
 
   lifecycle {
     ignore_changes = [
@@ -163,8 +155,6 @@ resource "aws_instance" "cfengine" {
 # Create the EIP and the association separately, so that the IP is kept
 # when the instance is recycled
 resource "aws_eip" "cfengine" {
-  vpc = true
-
   tags = {
     Name         = "${var.instance_name}.eip"
     instanceName = var.instance_name
@@ -175,3 +165,11 @@ resource "aws_eip_association" "cfengine" {
   instance_id   = local.instance_id
   allocation_id = aws_eip.cfengine.id
 }
+
+  # Tag the spot instance with Name after creation
+  resource "aws_ec2_tag" "spot_name" {
+    count       = local.spot_count
+    resource_id = aws_spot_instance_request.cfengine[count.index].spot_instance_id
+    key         = "Name"
+    value       = var.instance_name
+  }
